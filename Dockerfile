@@ -1,5 +1,7 @@
+FROM node:22-alpine AS base
+
 # Builder
-FROM node:22-alpine AS builder
+FROM base AS builder
 WORKDIR /app
 COPY package.json package-lock.json* pnpm-lock.yaml* yarn.lock* ./
 RUN if [ -f package-lock.json ]; then npm ci; \
@@ -11,15 +13,22 @@ RUN npx prisma generate
 RUN npm run worker:build
 RUN npm run build
 
+# Migrate
+FROM base AS migrate
+WORKDIR /app
+COPY prisma/ ./prisma
+COPY package*.json ./
+ENTRYPOINT ["sh", "-c", "npm install --no-save prisma && npx prisma generate && npx prisma migrate deploy"]
+
 # Worker
-FROM node:22-alpine AS worker
+FROM base AS worker
 WORKDIR /app
 COPY --from=builder /app/dist ./dist
 ENV NODE_ENV=production
 CMD ["node", "dist/worker.js"]
 
 # App
-FROM node:22-alpine AS app
+FROM base AS app
 WORKDIR /app
 COPY --from=builder /app/.next/standalone .
 ENV NODE_ENV=production

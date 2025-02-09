@@ -41,6 +41,7 @@ npm run migrate
 ## Build Docker images
 
 ```bash
+docker build --target migrate -t fedoto-migrate .
 docker build --target app -t fedoto-app .
 docker build --target worker -t fedoto-worker .
 ``` 
