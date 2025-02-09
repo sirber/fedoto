@@ -83,6 +83,9 @@ CREATE UNIQUE INDEX "Actor_outbox_key" ON "Actor"("outbox");
 CREATE UNIQUE INDEX "Actor_userId_key" ON "Actor"("userId");
 
 -- CreateIndex
+CREATE INDEX "Post_published_idx" ON "Post" USING BRIN ("published");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Hashtag_tag_key" ON "Hashtag"("tag");
 
 -- CreateIndex

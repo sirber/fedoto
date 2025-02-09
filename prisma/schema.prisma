@@ -44,7 +44,7 @@ model Post {
   HashtagPost HashtagPost[]
   Comment     Comment[]
 
-  @@index([published])
+  @@index([published], type: Brin)
 }
 
 model Follow {
