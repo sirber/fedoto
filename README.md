@@ -36,6 +36,11 @@ docker compose up -d
 npm run migrate
 ```
 
-## Hosting
+# Hosting
 
-TODO
+## Build Docker images
+
+```bash
+docker build --target app -t fedoto-app .
+docker build --target worker -t fedoto-worker .
+``` 
