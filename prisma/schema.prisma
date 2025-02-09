@@ -43,6 +43,8 @@ model Post {
   author      Actor         @relation(fields: [authorId], references: [id])
   HashtagPost HashtagPost[]
   Comment     Comment[]
+
+  @@index([published])
 }
 
 model Follow {
