@@ -1,15 +1,28 @@
 # Fedoto
 
-ActivityPub and Mastodon compatible photo sharing service.
+Photo Sharing service for everyone
 
-## Development
+## Goal of this project
 
-### Requirements
+- Share and Comment photos over the federated servers
+- Be compatible with ActivityPub and Mastodon clients
+- Be fast and efficient
 
-- Docker
+# Development
+
+## Requirements
+
 - NodeJS, installed via NVM
+- Docker
 
-### Bootstrap
+## Stack
+
+- NodeJS 22
+- NextJS 15
+- PostgreSQL 17
+- Redis 7
+
+## Bootstrap
 Create a .env with
 ```
 DATABASE_URL="postgresql://fedoto:fedoto@localhost:5432/fedoto"
