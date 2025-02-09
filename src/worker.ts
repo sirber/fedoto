@@ -1,3 +1,7 @@
+/**
+ * Redis Queue Worker
+ */
+
 import { createClient } from "redis";
 
 const subscriber = createClient({

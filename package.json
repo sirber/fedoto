@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migrate": "prisma migrate dev"
+    "migrate": "prisma migrate dev",
+    "worker:build": "esbuild src/worker.ts --bundle --outfile=dist/worker.js --platform=node --minify",
+    "worker:dev": "esbuild src/worker.ts --bundle --outfile=dist/worker.js --watch --platform=node"
   },
   "dependencies": {
     "@prisma/client": "^6.3.1",
@@ -22,6 +24,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "esbuild": "^0.25.0",
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
     "typescript": "^5"
