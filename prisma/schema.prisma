@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
+  id        String   @id @default(uuid()) @db.Uuid
   username  String   @unique
   email     String   @unique
   password  String
@@ -24,11 +24,11 @@ model User {
 }
 
 model Actor {
-  id        String   @id @default(uuid())
+  id        String   @id @default(uuid()) @db.Uuid
   type      String // e.g., "Person", "Service"
   inbox     String   @unique
   outbox    String   @unique
-  userId    String   @unique
+  userId    String   @unique @db.Uuid
   user      User     @relation(fields: [userId], references: [id])
   posts     Post[]
   following Follow[] @relation(name: "FollowingRelation")
@@ -36,33 +36,48 @@ model Actor {
 }
 
 model Post {
-  id          String        @id @default(uuid())
+  id          String        @id @default(uuid()) @db.Uuid
   content     String
   published   DateTime      @default(now())
-  authorId    String
+  authorId    String        @db.Uuid
   author      Actor         @relation(fields: [authorId], references: [id])
   HashtagPost HashtagPost[]
+  Comment     Comment[]
 }
 
 model Follow {
-  id          String @id @default(uuid())
-  followerId  String
-  followingId String
+  id          String @id @default(uuid()) @db.Uuid
+  followerId  String @db.Uuid
+  followingId String @db.Uuid
   follower    Actor  @relation(name: "FollowerRelation", fields: [followerId], references: [id])
   following   Actor  @relation(name: "FollowingRelation", fields: [followingId], references: [id])
 }
 
 model Hashtag {
-  id    String        @id @default(uuid())
+  id    String        @id @default(uuid()) @db.Uuid
   tag   String        @unique
   posts HashtagPost[]
 }
 
 model HashtagPost {
-  postId    String
-  hashtagId String
+  postId    String  @db.Uuid
+  hashtagId String  @db.Uuid
   post      Post    @relation(fields: [postId], references: [id])
   hashtag   Hashtag @relation(fields: [hashtagId], references: [id])
 
   @@id([postId, hashtagId])
+}
+
+model Comment {
+  id        String    @id @default(uuid()) @db.Uuid
+  content   String
+  published DateTime  @default(now())
+  postId    String    @db.Uuid
+  post      Post      @relation(fields: [postId], references: [id])
+  parentId  String?   @db.Uuid
+  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies   Comment[] @relation("CommentReplies")
+
+  @@index([postId])
+  @@index([parentId]) // Optional index to speed up querying replies
 }
